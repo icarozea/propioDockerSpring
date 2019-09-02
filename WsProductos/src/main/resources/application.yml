@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+      temp:
+        use_jdbc_metadata_defaults: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    #url: jdbc:postgresql://localhost:5432/tienda
+    #username: postgres
+    #password: postgres123
+    url: jdbc:postgresql://${host}:5432/${database}
+    username: ${username}
+    password: ${password}
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
