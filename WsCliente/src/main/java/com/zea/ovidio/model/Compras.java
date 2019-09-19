@@ -1,10 +1,9 @@
-package com.zea.ovidio.productos.model;
+package com.zea.ovidio.model;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +28,7 @@ public class Compras implements Serializable {
 	@JoinColumn(name = "id_cliente", nullable = false)
 	private Cliente idCliente;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "id_producto", nullable = false)
 	private Producto idProducto;
 
