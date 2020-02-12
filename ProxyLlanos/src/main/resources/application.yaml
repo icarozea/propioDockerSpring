@@ -1,0 +1,20 @@
+#server:
+#  port: 9090
+#zuul:
+#  sensitiveHeaders: Cookie,Set-Cookie
+#  routes:
+#    spring-security-oauth-resource:
+#      path: /spring-security-oauth-resource/**
+#      url: http://localhost:8082/spring-security-oauth-resource
+#    oauth:
+#      path: /user/**
+#      url: http://localhost:9091/user
+#    productos:
+#      path: /productos/**
+#      url: http://localhost:8081/productos
+#      
+#security:
+#  oauth2:
+#    resource:
+#      jwt:
+#        key-value: 123

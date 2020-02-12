@@ -1,14 +1,13 @@
-package com.zea.ovidio.productos;
+package com.llanos.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class WsProductosApplication {
+public class AutenticacionLlanosApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WsProductosApplication.class, args);
+		SpringApplication.run(AutenticacionLlanosApplication.class, args);
 	}
 
 }
