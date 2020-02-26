@@ -1,17 +1,23 @@
 package com.llanos.api.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.llanos.api.dto.UserToken;
 import com.llanos.api.repository.service.TokenService;
+
 
 /**
  * 
@@ -34,6 +40,9 @@ public class AutenticationController {
 
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private DefaultTokenServices tokenServices;
 
 
 	@PostMapping("/")
@@ -46,6 +55,17 @@ public class AutenticationController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(userToken, HttpStatus.CONFLICT);
 		}
+	}
+	
+	@GetMapping("/logout")
+	public ResponseEntity<Boolean> logoutPage(HttpServletRequest request) {
+		String authHeader = request.getHeader("Authorization");
+		String tokenValue = authHeader.replace("bearer", "").trim();
+		tokenServices.revokeToken(tokenValue);
+		tokenServices.setAccessTokenValiditySeconds(1);
+		tokenServices.setRefreshTokenValiditySeconds(1);
+		return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+		
 	}
 
 }

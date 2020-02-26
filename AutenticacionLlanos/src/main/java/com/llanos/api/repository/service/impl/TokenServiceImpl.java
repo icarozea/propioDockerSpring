@@ -2,18 +2,19 @@ package com.llanos.api.repository.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
 import com.llanos.api.config.WsProperties;
 import com.llanos.api.dto.UserToken;
-import com.llanos.api.model.Usuario;
+import com.llanos.api.model.UserContractor;
 import com.llanos.api.repository.UserRepository;
 import com.llanos.api.repository.service.TokenService;
 
@@ -28,18 +29,24 @@ public class TokenServiceImpl implements TokenService {
 
 	@Autowired
 	private WsProperties wsproperties;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	@Override
 	public UserToken generarToken(String user, String pass) {
-		Usuario usuario = new Usuario();
+		UserContractor usuario = new UserContractor();
 		UserToken usuarioToken = new UserToken();
-		Optional<Usuario> usuarioOp = userRepository.findByUsuario(user);
-		if (usuarioOp.isPresent()) {
-			usuario = usuarioOp.get();
-			if (usuario.getPassword().equals(pass)) {
-				usuarioToken.setToken(this.getJWTToken(usuario.getUsuario(), usuario.getRole()));
-				usuarioToken.setNombre(usuario.getUsuario());
+		List<UserContractor> usuariosBD = userRepository.findByEmail(user);
+		if (usuariosBD.size()>0) {
+			usuario = usuariosBD.get(0);
+			
+			if (BCrypt.checkpw(pass, usuario.getPassword())) {
+				usuarioToken.setToken(this.getJWTToken(usuario.getName(), "ADMIN"));
+				usuarioToken.setNombre(usuario.getName().toString());
 				usuarioToken.setEstado(Boolean.TRUE);
+			}else {
+				throw new RuntimeException("Error el password no concide");
 			}
 
 		}
